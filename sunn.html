@@ -82,6 +82,24 @@
 </head>
 
 <body>
+    <!-- Nút bật/tắt tiếng -->
+<button id="audio-icon" class="fa-volume-xmark" title="Tắt/mở tiếng" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+">
+</button>
 
     <div id="container"></div>
     <div id="music-loader" class="music-status">
@@ -114,141 +132,7 @@
         <i id="audio-icon" class="text-white  fa-solid fa-volume-high"></i>
     </button>
     <script>
-        // --- MODULE QUẢN LÝ ÂM THANH ---
-        const musicManager = {
-            // Properties
-            audio: null,
-            state: 'idle', // idle, loading, ready, playing, paused, muted, error
-            tokenData: null,
-
-       #audio-icon {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(255,255,255,0.8);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      cursor: pointer;
-    }
-    #audio-icon.fa-volume-high::before {
-      content: "🔊";
-    }
-    #audio-icon.fa-volume-xmark::before {
-      content: "🔇";
-    }
-  </style>
-</head>
-<body>
-
-<h2 style="text-align:center; margin-top:100px;">🎶 Chạm vào màn hình để phát nhạc 🎶</h2>
-
-<button id="audio-icon" class="fa-volume-xmark" title="Tắt/mở tiếng"></button>
-
-<script>
-const musicManager = {
-  audio: null,
-  state: 'idle',
-
-  _setupAudio(sourceUrl = 'hpbd.m4a') {
-    this.audio = new Audio(sourceUrl);
-    this.audio.loop = true;
-    this.audio.volume = 0.7;
-    this.attachEventListeners();
-    window.galaxyAudio = this.audio;
-    this.updateState('ready');
-  },
-
-  async init() {
-    this.updateState('loading');
-    this._setupAudio(); // Luôn dùng file hpbd.m4a
-  },
-
-  play() {
-    if (this.audio && this.audio.paused) {
-      return this.audio.play(); 
-    }
-    return Promise.resolve();
-  },
-
-  togglePlayback() {
-    if (!this.audio || this.state === 'loading' || this.state === 'error') return;
-    if (this.audio.muted) {
-      this.audio.muted = false;
-    }
-    if (this.audio.paused) {
-      this.audio.play();
-    } else {
-      this.audio.pause();
-    }
-  },
-
-  updateState(newState) {
-    this.state = newState;
-    this.updateUI();
-  },
-
-  updateUI() {
-    const icon = document.getElementById('audio-icon');
-    if (!icon || !this.audio) return;
-    if (this.audio.paused || this.audio.muted) {
-      icon.classList.remove("fa-volume-high");
-      icon.classList.add("fa-volume-xmark");
-    } else {
-      icon.classList.remove("fa-volume-xmark");
-      icon.classList.add("fa-volume-high");
-    }
-  },
-
-  attachEventListeners() {
-    if (!this.audio) return;
-    this.audio.onplay = () => this.updateState('playing');
-    this.audio.onpause = () => this.updateState('paused');
-    this.audio.onvolumechange = () => this.updateUI();
-  }
-};
-
-// ⏳ Khởi tạo nhạc khi DOM sẵn sàng
-window.addEventListener('DOMContentLoaded', () => {
-  musicManager.init();
-});
-
-// 🎯 Chạm đầu tiên để phát nhạc
-const handleFirstTouch = () => {
-  musicManager.play().catch(err => console.warn('Không phát được:', err));
-  document.body.removeEventListener('click', handleFirstTouch);
-  document.body.removeEventListener('touchstart', handleFirstTouch);
-};
-
-document.body.addEventListener('click', handleFirstTouch);
-document.body.addEventListener('touchstart', handleFirstTouch);
-
-// 🔇 Nút tắt/mở âm thanh
-document.getElementById('audio-icon').addEventListener('click', () => {
-  if (!musicManager.audio) return;
-  musicManager.audio.muted = !musicManager.audio.muted;
-  musicManager.updateUI();
-});
-<script>
-    <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    musicManager.init().then(() => {
-      const tryPlay = () => {
-        musicManager.play().catch(err => console.warn("Không phát được:", err));
-        document.body.removeEventListener('click', tryPlay);
-        document.body.removeEventListener('touchstart', tryPlay);
-      };
-      document.body.addEventListener('click', tryPlay);
-      document.body.addEventListener('touchstart', tryPlay);
-    });
-  });
-</script>
+     
         
             // Các hàm fetchWithAuth và getToken giữ nguyên...
             async getToken() {
@@ -528,6 +412,67 @@ document.getElementById('audio-icon').addEventListener('click', () => {
             });
         </script>
     <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95426b1ebfdd4a7f',t:'MTc1MDY2NTI3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='maind41d.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="../external.html?link=https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"95426b1ebfdd4a7f","version":"2025.6.2","r":1,"token":"dbcd8856a1a842ceb5c3d63534a9f51d","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
+<script>
+const musicManager = {
+  audio: null,
+
+  _setupAudio() {
+    this.audio = new Audio('hpbd.m4a');
+    this.audio.loop = true;
+    this.audio.volume = 0.7;
+    this.audio.muted = false;
+    this.audio.onvolumechange = () => this.updateUI();
+    this.audio.onplay = () => this.updateUI();
+    this.audio.onpause = () => this.updateUI();
+  },
+
+  init() {
+    this._setupAudio();
+    return Promise.resolve();
+  },
+
+  play() {
+    if (this.audio && this.audio.paused) {
+      return this.audio.play();
+    }
+    return Promise.resolve();
+  },
+
+  updateUI() {
+    const icon = document.getElementById('audio-icon');
+    if (!icon || !this.audio) return;
+
+    if (this.audio.muted || this.audio.paused) {
+      icon.classList.remove("fa-volume-high");
+      icon.classList.add("fa-volume-xmark");
+    } else {
+      icon.classList.remove("fa-volume-xmark");
+      icon.classList.add("fa-volume-high");
+    }
+  }
+};
+
+// Khởi tạo và chỉ phát khi chạm vào trang
+window.addEventListener('DOMContentLoaded', () => {
+  musicManager.init().then(() => {
+    const playMusic = () => {
+      musicManager.play().catch(err => console.warn("Không phát được:", err));
+      document.body.removeEventListener('click', playMusic);
+      document.body.removeEventListener('touchstart', playMusic);
+    };
+
+    document.body.addEventListener('click', playMusic);
+    document.body.addEventListener('touchstart', playMusic);
+  });
+});
+
+// Bắt sự kiện click nút để tắt/bật tiếng
+document.getElementById('audio-icon').addEventListener('click', () => {
+  if (!musicManager.audio) return;
+  musicManager.audio.muted = !musicManager.audio.muted;
+  musicManager.updateUI();
+});
+</script>
 </body>
 
 
