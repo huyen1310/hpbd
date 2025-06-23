@@ -50,11 +50,7 @@ function createGlowMaterial(color, size = 128, opacity = 0.55) {
     });
     return new THREE.Sprite(material);
 }
-async init() {
-  this.updateState('loading');
-  this._setupAudio('hpbd.m4a');
-  return Promise.resolve();
-}
+
 
 // ---- TẠO CÁC THÀNH PHẦN CỦA SCENE ----
 
