@@ -123,17 +123,14 @@
 
             // --- Core Functions ---
              _setupAudio() {
-                let audioSrc = window.dataLove2Loveloom?.data?.backgroundMusic;
-                if (!audioSrc) { // Nhạc dự phòng cuối cùng
-                    audioSrc = 'hpbd.m4a';
-                }
-                this.audio = new Audio(audioSrc);
-                this.audio.loop = true;
-                this.audio.volume = 0.7;
-                this.attachEventListeners();
-                window.galaxyAudio = this.audio; // Gán vào global để script.js dùng
-                this.updateState('ready'); // Báo rằng nhạc đã sẵn sàng để phát
-            },
+    const audioSrc = 'hpbd.m4a'; // File bạn đã upload
+    this.audio = new Audio(audioSrc);
+    this.audio.loop = true;
+    this.audio.volume = 0.7;
+    this.attachEventListeners?.();
+    window.galaxyAudio = this.audio;
+    this.updateState('ready');
+}
         
             async init() {
                 const musicData = window.dataLove2Loveloom.data;
