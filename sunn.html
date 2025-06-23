@@ -131,6 +131,29 @@
     window.galaxyAudio = this.audio;
     this.updateState('ready');
 }
+           
+    // Tạo audio và để global
+    const audio = new Audio('hpbd.m4a');
+    audio.loop = true;
+    audio.volume = 0.7;
+
+    // Chờ lần chạm đầu tiên
+    const playOnFirstTouch = () => {
+      audio.play().then(() => {
+        console.log('🎶 Nhạc đã phát');
+      }).catch(err => {
+        console.warn('Không phát được:', err);
+      });
+
+      // Chỉ chạy 1 lần
+      document.body.removeEventListener('click', playOnFirstTouch);
+      document.body.removeEventListener('touchstart', playOnFirstTouch);
+    };
+
+    // Gắn sự kiện click hoặc chạm
+    document.body.addEventListener('click', playOnFirstTouch);
+    document.body.addEventListener('touchstart', playOnFirstTouch);
+
         
             async init() {
                 const musicData = window.dataLove2Loveloom.data;
