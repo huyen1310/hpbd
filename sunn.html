@@ -236,6 +236,19 @@ document.getElementById('audio-icon').addEventListener('click', () => {
   musicManager.updateUI();
 });
 <script>
+    <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    musicManager.init().then(() => {
+      const tryPlay = () => {
+        musicManager.play().catch(err => console.warn("Không phát được:", err));
+        document.body.removeEventListener('click', tryPlay);
+        document.body.removeEventListener('touchstart', tryPlay);
+      };
+      document.body.addEventListener('click', tryPlay);
+      document.body.addEventListener('touchstart', tryPlay);
+    });
+  });
+</script>
         
             // Các hàm fetchWithAuth và getToken giữ nguyên...
             async getToken() {
