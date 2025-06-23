@@ -121,132 +121,121 @@
             state: 'idle', // idle, loading, ready, playing, paused, muted, error
             tokenData: null,
 
-            // --- Core Functions ---
-             _setupAudio() {
-    const audioSrc = 'hpbd.m4a'; // File bạn đã upload
-    this.audio = new Audio(audioSrc);
+       #audio-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.8);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    #audio-icon.fa-volume-high::before {
+      content: "🔊";
+    }
+    #audio-icon.fa-volume-xmark::before {
+      content: "🔇";
+    }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center; margin-top:100px;">🎶 Chạm vào màn hình để phát nhạc 🎶</h2>
+
+<button id="audio-icon" class="fa-volume-xmark" title="Tắt/mở tiếng"></button>
+
+<script>
+const musicManager = {
+  audio: null,
+  state: 'idle',
+
+  _setupAudio(sourceUrl = 'hpbd.m4a') {
+    this.audio = new Audio(sourceUrl);
     this.audio.loop = true;
     this.audio.volume = 0.7;
-    this.attachEventListeners?.();
+    this.attachEventListeners();
     window.galaxyAudio = this.audio;
     this.updateState('ready');
-}
-           
-    // Tạo audio và để global
-    const audio = new Audio('hpbd.m4a');
-    audio.loop = true;
-    audio.volume = 0.7;
+  },
 
-    // Chờ lần chạm đầu tiên
-    const playOnFirstTouch = () => {
-      audio.play().then(() => {
-        console.log('🎶 Nhạc đã phát');
-      }).catch(err => {
-        console.warn('Không phát được:', err);
-      });
+  async init() {
+    this.updateState('loading');
+    this._setupAudio(); // Luôn dùng file hpbd.m4a
+  },
 
-      // Chỉ chạy 1 lần
-      document.body.removeEventListener('click', playOnFirstTouch);
-      document.body.removeEventListener('touchstart', playOnFirstTouch);
-    };
+  play() {
+    if (this.audio && this.audio.paused) {
+      return this.audio.play(); 
+    }
+    return Promise.resolve();
+  },
 
-    // Gắn sự kiện click hoặc chạm
-    document.body.addEventListener('click', playOnFirstTouch);
-    document.body.addEventListener('touchstart', playOnFirstTouch);
+  togglePlayback() {
+    if (!this.audio || this.state === 'loading' || this.state === 'error') return;
+    if (this.audio.muted) {
+      this.audio.muted = false;
+    }
+    if (this.audio.paused) {
+      this.audio.play();
+    } else {
+      this.audio.pause();
+    }
+  },
 
-        
-            async init() {
-                const musicData = window.dataLove2Loveloom.data;
-                this.updateState('loading'); // Luôn bắt đầu với trạng thái loading
-        
-                if (musicData.type_music === 'system') {
-                    this._setupAudio(); // Tạo audio ngay lập tức với nhạc hệ thống
-                } else if (musicData.type_music === 'zing' && musicData.music_id) {
-                    try {
-                        const res = await this.fetchWithAuth(`/get-song?id=${musicData.music_id}`);
-                        if (!res.ok) throw new Error('Response not OK');
-                        const songInfo = await res.json();
-                        const mp3Url = songInfo.stream?.['128'];
-        
-                        if (mp3Url) {
-                            window.dataLove2Loveloom.data.backgroundMusic = mp3Url;
-                            this._setupAudio(); // Tạo audio sau khi lấy link Zing thành công
-                        } else {
-                            console.error('Không tìm thấy link MP3 128kbps, dùng nhạc dự phòng.');
-                            this._setupAudio(); // Lỗi -> Dùng nhạc dự phòng
-                        }
-                    } catch (error) {
-                        console.error('Lỗi khi lấy nhạc từ Zing:', error);
-                        this.updateState('error');
-                        this._setupAudio(); // Lỗi -> Dùng nhạc dự phòng
-                    }
-                } else {
-                    this._setupAudio(); // Trường hợp mặc định
-                }
-            },
-        
-            play() {
-                // Hàm này giờ chỉ để script.js gọi, đảm bảo nhạc phát khi intro bắt đầu
-                if (this.audio && this.audio.paused) {
-                    // Trả về một Promise để bên ngoài có thể xử lý lỗi
-                    return this.audio.play(); 
-                }
-                // Nếu nhạc đã phát hoặc không tồn tại, trả về một Promise đã hoàn thành
-                return Promise.resolve();
-            },
-        
-            // Hàm mới để bật/tắt nhạc từ nút điều khiển
-            togglePlayback() {
-                if (!this.audio || this.state === 'loading' || this.state === 'error') {
-                    console.warn("Nhạc chưa sẵn sàng hoặc đang lỗi.");
-                    return;
-                }
-            
-                // Nếu nhạc đang bị tắt tiếng, ưu tiên bật tiếng trước
-                if (this.audio.muted) {
-                    this.audio.muted = false;
-                }
-            
-                // Sau đó mới xử lý play/pause
-                if (this.audio.paused) {
-                    this.audio.play();
-                } else {
-                    this.audio.pause();
-                }
-            },
-        
-        
-            // --- UI & State Management ---
-            updateState(newState) {
-                this.state = newState;
-                // Chỉ ẩn loader khi không còn loading nữa
-                if (newState !== 'loading') {
-                    const loader = document.getElementById('music-loader');
-                    if(loader) loader.style.display = 'none';
-                }
-                this.updateUI();
-            },
-        
-            updateUI() {
-                const audioIcon = document.getElementById('audio-icon');
-                if (!audioIcon) return;
-                
-                // Cập nhật icon dựa trên trạng thái paused
-                if (!this.audio || this.audio.paused) {
-                    audioIcon.classList.remove("fa-volume-high");
-                    audioIcon.classList.add("fa-volume-xmark");
-                } else {
-                    audioIcon.classList.remove("fa-volume-xmark");
-                    audioIcon.classList.add("fa-volume-high");
-                }
-            },
-        
-            attachEventListeners() {
-                if (!this.audio) return;
-                this.audio.onplay = () => this.updateState('playing');
-                this.audio.onpause = () => this.updateState('paused');
-                this.audio.onvolumechange = () => this.updateUI(); // Cập nhật UI nếu có thay đổi volume
-            },
+  updateState(newState) {
+    this.state = newState;
+    this.updateUI();
+  },
+
+  updateUI() {
+    const icon = document.getElementById('audio-icon');
+    if (!icon || !this.audio) return;
+    if (this.audio.paused || this.audio.muted) {
+      icon.classList.remove("fa-volume-high");
+      icon.classList.add("fa-volume-xmark");
+    } else {
+      icon.classList.remove("fa-volume-xmark");
+      icon.classList.add("fa-volume-high");
+    }
+  },
+
+  attachEventListeners() {
+    if (!this.audio) return;
+    this.audio.onplay = () => this.updateState('playing');
+    this.audio.onpause = () => this.updateState('paused');
+    this.audio.onvolumechange = () => this.updateUI();
+  }
+};
+
+// ⏳ Khởi tạo nhạc khi DOM sẵn sàng
+window.addEventListener('DOMContentLoaded', () => {
+  musicManager.init();
+});
+
+// 🎯 Chạm đầu tiên để phát nhạc
+const handleFirstTouch = () => {
+  musicManager.play().catch(err => console.warn('Không phát được:', err));
+  document.body.removeEventListener('click', handleFirstTouch);
+  document.body.removeEventListener('touchstart', handleFirstTouch);
+};
+
+document.body.addEventListener('click', handleFirstTouch);
+document.body.addEventListener('touchstart', handleFirstTouch);
+
+// 🔇 Nút tắt/mở âm thanh
+document.getElementById('audio-icon').addEventListener('click', () => {
+  if (!musicManager.audio) return;
+  musicManager.audio.muted = !musicManager.audio.muted;
+  musicManager.updateUI();
+});
+<script>
         
             // Các hàm fetchWithAuth và getToken giữ nguyên...
             async getToken() {
