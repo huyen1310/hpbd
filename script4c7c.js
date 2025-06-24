@@ -1258,11 +1258,14 @@ centralGlow.name = 'main-glow';
 function setFullScreen() {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
+
     const container = document.getElementById('container');
     if (container) {
         container.style.height = `${window.innerHeight}px`;
+
+        // ✅ Gắn chặn cuộn trực tiếp tại đây
+        container.addEventListener('touchmove', preventDefault, { passive: false });
     }
-    
 }
 
 window.addEventListener('resize', setFullScreen);
@@ -1271,12 +1274,10 @@ window.addEventListener('orientationchange', () => {
 });
 setFullScreen();
 
+// ✅ Chặn thao tác trên toàn trang
 const preventDefault = event => event.preventDefault();
 document.addEventListener('touchmove', preventDefault, { passive: false });
 document.addEventListener('gesturestart', preventDefault, { passive: false });
-
-
-    container.addEventListener('touchmove', preventDefault, { passive: false });
 
 
 
