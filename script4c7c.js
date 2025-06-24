@@ -51,7 +51,6 @@ function createGlowMaterial(color, size = 128, opacity = 0.55) {
     return new THREE.Sprite(material);
 }
 
-
 // ---- TẠO CÁC THÀNH PHẦN CỦA SCENE ----
 
 // Glow trung tâm
@@ -88,9 +87,9 @@ const galaxyParameters = {
 // Danh sách hình ảnh trái tim, kết hợp dữ liệu từ subdomain và mặc định
 const heartImages = [
     ...(window.dataLove2Loveloom && window.dataLove2Loveloom.data.heartImages ? window.dataLove2Loveloom.data.heartImages : []),
-    'img/img1.JPG', 'img/img3.JPG', 'img/img7.JPG',
-    'img/img2.JPG', 'img/img4.JPG', 'img/img8.JPG',
-    'img/img5.jpg', 'img/img6.PNG', 'img/img9.JPG'
+    'image404.jpg', 'image404.jpg', 'image404.jpg',
+    'image404.jpg', 'image404.jpg', 'image404.jpg',
+    'image404.jpg', 'image404.jpg', 'image404.jpg'
 ];
 
 const textureLoader = new THREE.TextureLoader();
@@ -612,7 +611,7 @@ scene.add(planet);
 
 // ---- TẠO CÁC VÒNG CHỮ QUAY QUANH HÀNH TINH ----
 const ringTexts = [
-    'Happy Birthday Huyền',
+    'LoveLoom',
     ...(window.dataLove2Loveloom && window.dataLove2Loveloom.data.ringTexts ? window.dataLove2Loveloom.data.ringTexts : [])
 ];
 
@@ -1258,13 +1257,9 @@ centralGlow.name = 'main-glow';
 function setFullScreen() {
     const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
-
     const container = document.getElementById('container');
     if (container) {
         container.style.height = `${window.innerHeight}px`;
-
-        // ✅ Gắn chặn cuộn trực tiếp tại đây
-        container.addEventListener('touchmove', preventDefault, { passive: false });
     }
 }
 
@@ -1274,11 +1269,14 @@ window.addEventListener('orientationchange', () => {
 });
 setFullScreen();
 
-// ✅ Chặn thao tác trên toàn trang
 const preventDefault = event => event.preventDefault();
 document.addEventListener('touchmove', preventDefault, { passive: false });
 document.addEventListener('gesturestart', preventDefault, { passive: false });
 
+const container = document.getElementById('container');
+if (container) {
+    container.addEventListener('touchmove', preventDefault, { passive: false });
+}
 
 
 // =======================================================================
@@ -1291,9 +1289,9 @@ function checkOrientation() {
     const isMobilePortrait = window.innerHeight > window.innerWidth && 'ontouchstart' in window;
 
     if (isMobilePortrait) {
-        document.body.classList.add('portrait');
+        document.body.classList.add('portrait-mode');
     } else {
-        document.body.classList.remove('portrait');
+        document.body.classList.remove('portrait-mode');
     }
 }
 
