@@ -87,7 +87,7 @@ const galaxyParameters = {
 // Danh sách hình ảnh trái tim, kết hợp dữ liệu từ subdomain và mặc định
 const heartImages = [
     ...(window.dataLove2Loveloom && window.dataLove2Loveloom.data.heartImages ? window.dataLove2Loveloom.data.heartImages : []),
-    'image404.jpg', 'image404.jpg', 'image404.jpg',
+    'img/img1.JPG', 'image404.jpg', 'image404.jpg',
     'image404.jpg', 'image404.jpg', 'image404.jpg',
     'image404.jpg', 'image404.jpg', 'image404.jpg'
 ];
