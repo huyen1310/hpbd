@@ -158,20 +158,30 @@
         this.state = newState;
         this.updateUI();
       },
+updateUI() {
+  const audioIcon = document.getElementById('audio-icon');
+  const loader = document.getElementById('music-loader');
 
-      updateUI() {
-        const audioIcon = document.getElementById('audio-icon');
-        if (!audioIcon) return;
+  // Xử lý biểu tượng âm thanh
+  if (audioIcon) {
+    if (!this.audio || this.audio.paused) {
+      audioIcon.classList.remove("fa-volume-high");
+      audioIcon.classList.add("fa-volume-xmark");
+    } else {
+      audioIcon.classList.remove("fa-volume-xmark");
+      audioIcon.classList.add("fa-volume-high");
+    }
+  },
 
-        if (!this.audio || this.audio.paused) {
-          audioIcon.classList.remove("fa-volume-high");
-          audioIcon.classList.add("fa-volume-xmark");
-        } else {
-          audioIcon.classList.remove("fa-volume-xmark");
-          audioIcon.classList.add("fa-volume-high");
-        }
-      },
-
+  // Xử lý loader
+  if (loader) {
+    if (this.state === 'loading') {
+      loader.style.display = 'flex';
+    } else {
+      loader.style.display = 'none';
+    }
+  }
+},
       attachEventListeners() {
         if (!this.audio) return;
         this.audio.onplay = () => this.updateState('playing');
