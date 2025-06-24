@@ -1275,8 +1275,7 @@ const preventDefault = event => event.preventDefault();
 document.addEventListener('touchmove', preventDefault, { passive: false });
 document.addEventListener('gesturestart', preventDefault, { passive: false });
 
-const container = document.getElementById('container');
-if (container) {
+
     container.addEventListener('touchmove', preventDefault, { passive: false });
 }
 
