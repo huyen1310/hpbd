@@ -1260,7 +1260,6 @@ function setFullScreen() {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
     const container = document.getElementById('container');
     if (container) {
-        container.style.width = `${window.innerWidth}px`;
         container.style.height = `${window.innerHeight}px`;
     }
     const canvas = document.querySelector('canvas');
