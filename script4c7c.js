@@ -1291,9 +1291,9 @@ function checkOrientation() {
     const isMobilePortrait = window.innerHeight > window.innerWidth && 'ontouchstart' in window;
 
     if (isMobilePortrait) {
-        document.body.classList.add('portrait-mode');
+        document.body.classList.add('portrait');
     } else {
-        document.body.classList.remove('portrait-mode');
+        document.body.classList.remove('portrait');
     }
 }
 
