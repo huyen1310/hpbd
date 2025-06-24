@@ -1262,11 +1262,7 @@ function setFullScreen() {
     if (container) {
         container.style.height = `${window.innerHeight}px`;
     }
-    const canvas = document.querySelector('canvas');
-if (canvas) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
+    
 }
 
 window.addEventListener('resize', setFullScreen);
