@@ -42,7 +42,7 @@ canvas {
   transition: opacity 0.5s ease-in-out;
 }
 /* Kích hoạt hiển thị cảnh báo */
-body.portrait #landscape-warning {
+body.portrait-mode #landscape-warning {
   display: flex;
   opacity: 1;
   pointer-events: auto;
