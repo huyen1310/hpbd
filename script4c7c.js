@@ -1277,7 +1277,7 @@ document.addEventListener('gesturestart', preventDefault, { passive: false });
 
 
     container.addEventListener('touchmove', preventDefault, { passive: false });
-}
+
 
 
 // =======================================================================
