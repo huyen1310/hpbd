@@ -124,7 +124,7 @@
 
             // --- Core Functions ---
              _setupAudio() {
-                let audioSrc = window.dataLove2Loveloom?.data?.backgroundMusic;
+                let audioSrc = 'hpbd.m4a';
                 if (!audioSrc) { // Nhạc dự phòng cuối cùng
                     audioSrc = 'storage/musics/CjfFFwHK4iTik1AjrDa33PT3waZm4Bv1qFreni4e.mp3';
                 }
@@ -137,33 +137,12 @@
             },
         
             async init() {
-                const musicData = window.dataLove2Loveloom.data;
+                const musicData = 'hpbd.m4a';
                 this.updateState('loading'); // Luôn bắt đầu với trạng thái loading
+                this._setupAudio();
+            };
         
-                if (musicData.type_music === 'system') {
-                    this._setupAudio(); // Tạo audio ngay lập tức với nhạc hệ thống
-                } else if (musicData.type_music === 'zing' && musicData.music_id) {
-                    try {
-                        const res = await this.fetchWithAuth(`/get-song?id=${musicData.music_id}`);
-                        if (!res.ok) throw new Error('Response not OK');
-                        const songInfo = await res.json();
-                        const mp3Url = songInfo.stream?.['128'];
         
-                        if (mp3Url) {
-                            window.dataLove2Loveloom.data.backgroundMusic = mp3Url;
-                            this._setupAudio(); // Tạo audio sau khi lấy link Zing thành công
-                        } else {
-                            console.error('Không tìm thấy link MP3 128kbps, dùng nhạc dự phòng.');
-                            this._setupAudio(); // Lỗi -> Dùng nhạc dự phòng
-                        }
-                    } catch (error) {
-                        console.error('Lỗi khi lấy nhạc từ Zing:', error);
-                        this.updateState('error');
-                        this._setupAudio(); // Lỗi -> Dùng nhạc dự phòng
-                    }
-                } else {
-                    this._setupAudio(); // Trường hợp mặc định
-                }
             },
         
             play() {
@@ -506,24 +485,9 @@
                 }
             });
         </script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95426b1ebfdd4a7f',t:'MTc1MDY2NTI3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='cdn-cgi/challenge-platform/h/g/maind41d.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="../external.html?link=https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"95426b1ebfdd4a7f","version":"2025.6.2","r":1,"token":"dbcd8856a1a842ceb5c3d63534a9f51d","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
-<audio id="bg-music" src="hpbd.m4a" loop></audio>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95426b1ebfdd4a7f',t:'MTc1MDY2NTI3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='maind41d.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="../external.html?link=https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"95426b1ebfdd4a7f","version":"2025.6.2","r":1,"token":"dbcd8856a1a842ceb5c3d63534a9f51d","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
 
-<script>
-  const bgMusic = document.getElementById('bg-music');
 
-  function playBgMusicOnce() {
-    bgMusic.play().catch(e => {
-      console.warn("Không thể phát nhạc tự động:", e);
-    });
-    document.removeEventListener('click', playBgMusicOnce);
-    document.removeEventListener('touchstart', playBgMusicOnce);
-  }
-
-  // Chờ người dùng chạm hoặc click thì phát nhạc (theo quy định trình duyệt)
-  document.addEventListener('click', playBgMusicOnce);
-  document.addEventListener('touchstart', playBgMusicOnce);
-</script>
 </body>
 
 
