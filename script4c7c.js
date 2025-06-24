@@ -87,9 +87,9 @@ const galaxyParameters = {
 // Danh sách hình ảnh trái tim, kết hợp dữ liệu từ subdomain và mặc định
 const heartImages = [
     ...(window.dataLove2Loveloom && window.dataLove2Loveloom.data.heartImages ? window.dataLove2Loveloom.data.heartImages : []),
-    'img/img1.JPG', 'image404.jpg', 'image404.jpg',
-    'image404.jpg', 'image404.jpg', 'image404.jpg',
-    'image404.jpg', 'image404.jpg', 'image404.jpg'
+    'img/img1.JPG', 'img/img4.JPG', 'img/img7.JPG',
+    'img/img2.JPG', 'img/img5.jpg', 'img/img8.JPG',
+    'img/img3.JPG', 'img/img6.PNG', 'img/img9.JPG'
 ];
 
 const textureLoader = new THREE.TextureLoader();
@@ -611,7 +611,7 @@ scene.add(planet);
 
 // ---- TẠO CÁC VÒNG CHỮ QUAY QUANH HÀNH TINH ----
 const ringTexts = [
-    'LoveLoom',
+    'Happy Birthday Huyền ❤',
     ...(window.dataLove2Loveloom && window.dataLove2Loveloom.data.ringTexts ? window.dataLove2Loveloom.data.ringTexts : [])
 ];
 
