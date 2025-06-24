@@ -126,7 +126,7 @@
              _setupAudio() {
                 let audioSrc = 'hpbd.m4a';
                 if (!audioSrc) { // Nhạc dự phòng cuối cùng
-                    audioSrc = 'storage/musics/CjfFFwHK4iTik1AjrDa33PT3waZm4Bv1qFreni4e.mp3';
+                    audioSrc = 'hpbd.m4a';
                 }
                 this.audio = new Audio(audioSrc);
                 this.audio.loop = true;
@@ -136,11 +136,64 @@
                 this.updateState('ready'); // Báo rằng nhạc đã sẵn sàng để phát
             },
         
-            async init() {
-                const musicData = 'hpbd.m4a';
-                this.updateState('loading'); // Luôn bắt đầu với trạng thái loading
-                this._setupAudio();
+        
             };
+          async init() {
+        this.updateState('loading');
+        this._setupAudio(); // Không cần điều kiện nào nữa
+    },
+
+    play() {
+        if (this.audio && this.audio.paused) {
+            return this.audio.play(); 
+        }
+        return Promise.resolve();
+    },
+
+    togglePlayback() {
+        if (!this.audio || this.state === 'loading' || this.state === 'error') {
+            console.warn("Nhạc chưa sẵn sàng hoặc đang lỗi.");
+            return;
+        }
+        if (this.audio.muted) {
+            this.audio.muted = false;
+        }
+        if (this.audio.paused) {
+            this.audio.play();
+        } else {
+            this.audio.pause();
+        }
+    },
+
+    updateState(newState) {
+        this.state = newState;
+        if (newState !== 'loading') {
+            const loader = document.getElementById('music-loader');
+            if (loader) loader.style.display = 'none';
+        }
+        this.updateUI();
+    },
+
+    updateUI() {
+        const audioIcon = document.getElementById('audio-icon');
+        if (!audioIcon) return;
+
+        if (!this.audio || this.audio.paused) {
+            audioIcon.classList.remove("fa-volume-high");
+            audioIcon.classList.add("fa-volume-xmark");
+        } else {
+            audioIcon.classList.remove("fa-volume-xmark");
+            audioIcon.classList.add("fa-volume-high");
+        }
+    },
+
+    attachEventListeners() {
+        if (!this.audio) return;
+        this.audio.onplay = () => this.updateState('playing');
+        this.audio.onpause = () => this.updateState('paused');
+        this.audio.onvolumechange = () => this.updateUI();
+    },
+};
         
         
             },
